@@ -2,9 +2,6 @@
 //
 
 #include <iostream>
-#include <random>
-#include <time.h>
-#include <vector>
 #include "Case.h"
 #include "Grille.h"
 
@@ -22,11 +19,12 @@ int main()
     //affecter les mines dans la grille
     dem.affecterMines(nbMines);
 
+    // affecter les autres valeurs
+    dem.affecterValeursCases();
+
     // affichage de la grille
     dem.afficherGrille();
-    /*for (i = 0; i < tailleGrille; i++)
-        cout << "La case[" << grille[i].getX() << "][" << grille[i].getY() << "] : " << grille[i].getVal() << endl;
-
+    /*
     cout << " --- --- --- " << endl;
     cout << "| 0 | 0 | 0 |" << endl;
     cout << " --- --- --- " << endl;

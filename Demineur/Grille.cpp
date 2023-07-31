@@ -55,19 +55,70 @@ void Grille::afficherGrille()
 
 void Grille::affecterMines(int nbMines)
 {
-	vector<int> choixMines;
-	vector<int>::iterator it;
-	for (int i = 0; i < m_nbCases-1; i++)
+	if (nbMines <= 0)
 	{
-		choixMines.push_back(i);
+		for (int i = 0; i < m_nbCases - 1; i++)
+		{
+			m_grille.at(i).setVal(0);
+		}
 	}
-
-	srand((unsigned int)time(0));
-	for (int i = 0; i < nbMines; i++)
+	else if (nbMines >= m_nbCases)
 	{
-		int valRandom = (int)((float)rand() * choixMines.size() / (RAND_MAX - 1));
-		m_grille.at(choixMines[valRandom]).setVal(9);
-		it = choixMines.begin() + valRandom;
-		choixMines.erase(it);
+		for (int i = 0; i < m_nbCases - 1; i++)
+		{
+			m_grille.at(i).setVal(9);
+		}
+	}
+	else
+	{
+		vector<int> choixMines;
+		vector<int>::iterator it;
+		for (int i = 0; i < m_nbCases - 1; i++)
+		{
+			choixMines.push_back(i);
+		}
+
+		srand((unsigned int)time(0));
+		for (int i = 0; i < nbMines; i++)
+		{
+			int valRandom = (int)((float)rand() * choixMines.size() / (RAND_MAX - 1));
+			m_grille.at(choixMines[valRandom]).setVal(9);
+			it = choixMines.begin() + valRandom;
+			choixMines.erase(it);
+		}
+	}
+}
+
+void Grille::affecterValeursCases()
+{
+	int cpt = 0;
+	int  abs, coor;
+	for (int parcourCase = 0; parcourCase < m_nbCases; parcourCase++)
+	{
+		cout << "case " << parcourCase << endl;
+		if (m_grille.at(parcourCase).getVal() != 9)
+		{
+			abs = m_grille.at(parcourCase).getX();
+			coor = m_grille.at(parcourCase).getY();
+			for (int j = coor - 1; j <= coor + 1; j++)
+			{
+				if (j >= 0 && j < m_hauteur)
+				{
+					for (int i = abs - 1; i <= abs + 1; i++)
+					{
+						if (i >= 0 && i < m_longueur)
+						{
+							cout << "m_grille " << i + (j * m_longueur) << endl;
+							if (m_grille.at(i + (j * m_longueur)).getVal() == 9)
+							{
+								cpt++;
+							}
+						}
+					}
+				}
+			}
+			m_grille.at(parcourCase).setVal(cpt);
+			cpt = 0;
+		}
 	}
 }
