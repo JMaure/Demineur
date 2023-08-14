@@ -33,24 +33,46 @@ Grille::~Grille()
 }
 
 // retourne la Case aux coordonnées x,y
-Case Grille::getCase(int x, int y)
+Case& Grille::getCase(int x, int y)
 {
-	return m_grille.at(x + (y * m_longueur));  // m_grille[x + y * m_longueur];
+	return m_grille.at(x + (y * m_longueur));
 }
 
 void Grille::afficherGrille()
 {
+	int cpt = 0;
+	cout << "  ";
+	for (int i = 0; i < m_longueur; i++)
+		cout << "  " << i+1 << " ";
+	cout << endl;
 	for (int j = 0; j < m_hauteur; j++)
 	{
+		cout << "  ";
 		for (int i = 0; i < m_longueur; i++)
 			cout << " ---";
 		cout << endl;
+		cout << j + 1 << " ";
 		for (int i = 0; i < m_longueur; i++)
-			cout << "| " << m_grille.at(i + (j * m_longueur)).getVal() << " ";
+		{
+			if (m_grille.at(i + (j * m_longueur)).isDecouverte())
+			{
+				if(m_grille.at(i + (j * m_longueur)).getVal() == 9)
+					cout << "| X ";
+				else
+					cout << "| " << m_grille.at(i + (j * m_longueur)).getVal() << " ";
+			}
+			else if (m_grille.at(i + (j * m_longueur)).isMarquee())
+				cout << "| M ";
+			else
+				cout << "|   ";
+			cpt++;
+		}
 		cout << "|" << endl;
 	}
+	cout << "  ";
 	for (int i = 0; i < m_longueur; i++)
 		cout << " ---";
+	cout << endl;
 }
 
 void Grille::affecterMines(int nbMines)
@@ -95,7 +117,6 @@ void Grille::affecterValeursCases()
 	int  abs, coor;
 	for (int parcourCase = 0; parcourCase < m_nbCases; parcourCase++)
 	{
-		cout << "case " << parcourCase << endl;
 		if (m_grille.at(parcourCase).getVal() != 9)
 		{
 			abs = m_grille.at(parcourCase).getX();
@@ -108,7 +129,6 @@ void Grille::affecterValeursCases()
 					{
 						if (i >= 0 && i < m_longueur)
 						{
-							cout << "m_grille " << i + (j * m_longueur) << endl;
 							if (m_grille.at(i + (j * m_longueur)).getVal() == 9)
 							{
 								cpt++;

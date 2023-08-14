@@ -11,7 +11,7 @@ int main()
 {
     cout << "Hello World!\n";
 
-    const int longueur = 3, hauteur = 3, nbMines = 2;
+    const int longueur = 5, hauteur = 5, nbMines = 3;
 
     // Création de la grille de cases
     Grille dem(longueur, hauteur);
@@ -32,7 +32,27 @@ int main()
     cout << " --- --- --- " << endl;
     cout << "| 0 | 0 | 0 |" << endl;
     cout << " --- --- --- " << endl;*/
-    return 0;
+    int x, y;
+    string coordonnees = "000";
+    bool finPartie = false;
+    do
+    {
+        cout << "Choisir case : ";
+        cin >> coordonnees;
+        x = coordonnees[0] - '0' - 1;
+        y = coordonnees[1] - '0' - 1;
+        if (coordonnees[2] == 'M')
+            dem.getCase(x, y).estMarquee();
+        else
+            dem.getCase(x, y).estDecouverte();
+
+        dem.afficherGrille();
+        if (dem.getCase(x, y).isDecouverte() && dem.getCase(x, y).getVal() == 9)
+        {
+            finPartie = true;
+            cout << "Partie perdue ! " << endl;
+        }
+    } while (!finPartie);
 }
 
 
