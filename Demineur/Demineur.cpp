@@ -9,7 +9,9 @@ using namespace std;
 
 int main()
 {
-    cout << "Hello World!\n";
+    cout << "JEU DU DEMINEUR" << endl << endl;
+    cout << "Pour jouer il faut donner les coordonnees de la case a decouvrir. (ex : 12)" << endl;
+    cout << "Pour marquer l'emplacement d'une mine rajouter 'M' a la suite des coordonnees (ex : 12M)" << endl << endl;
 
     const int longueur = 5, hauteur = 5, nbMines = 3;
 
@@ -24,14 +26,7 @@ int main()
 
     // affichage de la grille
     dem.afficherGrille();
-    /*
-    cout << " --- --- --- " << endl;
-    cout << "| 0 | 0 | 0 |" << endl;
-    cout << " --- --- --- " << endl;
-    cout << "| 0 | 0 | 0 |" << endl;
-    cout << " --- --- --- " << endl;
-    cout << "| 0 | 0 | 0 |" << endl;
-    cout << " --- --- --- " << endl;*/
+
     int x, y;
     string coordonnees = "000";
     bool finPartie = false;
@@ -51,6 +46,11 @@ int main()
         {
             finPartie = true;
             cout << "Partie perdue ! " << endl;
+        }
+        if (dem.estTerminee())
+        {
+            finPartie = true;
+            cout << "Partie gagnee ! " << endl;
         }
     } while (!finPartie);
 }

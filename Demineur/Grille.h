@@ -24,6 +24,8 @@ public:
 	void affecterMines(int nbMines);
 	// affecte la valeur de chaque case par rapport au nombres de mines autour
 	void affecterValeursCases();
+	// retourne vrai si la grille est entièrement découverte
+	bool estTerminee();
 
 private:
 	// longueur de la grille

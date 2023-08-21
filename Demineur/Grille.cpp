@@ -16,13 +16,11 @@ Grille::Grille() : m_longueur(1), m_hauteur(1), m_nbCases(1)
 // Constructeur Grille de la grille de taille longueur * largeur avec valeur des cases à 0
 Grille::Grille(int longueur, int hauteur) : m_longueur(longueur), m_hauteur(hauteur), m_nbCases(longueur * hauteur)
 {
-	//m_grille[m_nbCases-1];
-
 	for (int j = 0; j < hauteur; j++)
 	{
 		for (int i = 0; i < longueur; i++)
 		{
-			m_grille.push_back(Case(i, j, 0)); // m_grille[i + (j * longueur)] = Case(i, j, 0);
+			m_grille.push_back(Case(i, j, 0));
 		}
 	}
 }
@@ -141,4 +139,23 @@ void Grille::affecterValeursCases()
 			cpt = 0;
 		}
 	}
+}
+
+bool Grille::estTerminee()
+{
+	bool fini = true;
+	Case* caseParcourue = new Case;
+	int cpt = 0;
+	while (cpt < m_grille.size() && fini == true)
+	{
+		caseParcourue = &m_grille.at(cpt);
+		if ((!caseParcourue->isDecouverte() && caseParcourue->getVal() != 9) || (caseParcourue->isMarquee() && caseParcourue->getVal() != 9))
+		{
+			fini = false;
+		}
+		cpt++;
+	}
+	caseParcourue = 0;
+	delete caseParcourue;
+	return fini;
 }
