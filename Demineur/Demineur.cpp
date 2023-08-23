@@ -9,11 +9,15 @@ using namespace std;
 
 int main()
 {
+    // règles du jeu
     cout << "JEU DU DEMINEUR" << endl << endl;
     cout << "Pour jouer il faut donner les coordonnees de la case a decouvrir. (ex : 12)" << endl;
     cout << "Pour marquer l'emplacement d'une mine rajouter 'M' a la suite des coordonnees (ex : 12M)" << endl << endl;
 
+    //définition des constantes de grille
     const int longueur = 5, hauteur = 5, nbMines = 3;
+    clock_t debut, fin;
+    float temps;
 
     // Création de la grille de cases
     Grille dem(longueur, hauteur);
@@ -30,6 +34,7 @@ int main()
     int x, y;
     string coordonnees = "000";
     bool finPartie = false;
+    debut = clock();
     do
     {
         cout << "Choisir case : ";
@@ -46,13 +51,17 @@ int main()
         {
             finPartie = true;
             cout << "Partie perdue ! " << endl;
+            fin = clock();
         }
         if (dem.estTerminee())
         {
             finPartie = true;
             cout << "Partie gagnee ! " << endl;
+            fin = clock();
         }
     } while (!finPartie);
+    temps = ((float)fin - debut) / CLOCKS_PER_SEC;
+    cout << "La partie a duree : " << temps << " sec" << endl;
 }
 
 
