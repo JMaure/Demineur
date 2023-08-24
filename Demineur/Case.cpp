@@ -41,7 +41,7 @@ bool Case::isDecouverte()
 	return (m_etat == 1);
 }
 
-void Case::estDecouverte()
+void Case::decouverte()
 {
 	this->m_etat = 1;
 }
@@ -51,7 +51,7 @@ bool Case::isMarquee()
 	return (m_etat == 2);
 }
 
-void Case::estMarquee()
+void Case::marquee()
 {
 	this->m_etat = 2;
 }

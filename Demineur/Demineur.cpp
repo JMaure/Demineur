@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Case.h"
 #include "Grille.h"
+#include "Chrono.h"
 
 using namespace std;
 
@@ -16,14 +17,17 @@ int main()
 
     //définition des constantes de grille
     const int longueur = 5, hauteur = 5, nbMines = 3;
-    clock_t debut, fin;
-    float temps;
+
+    const int revelee = 1, marquee = 2;
 
     // Création de la grille de cases
-    Grille dem(longueur, hauteur);
+    Grille dem(longueur, hauteur, nbMines);
+
+    // création du timer
+    Chrono timer;
 
     //affecter les mines dans la grille
-    dem.affecterMines(nbMines);
+    dem.affecterMines();
 
     // affecter les autres valeurs
     dem.affecterValeursCases();
@@ -34,34 +38,50 @@ int main()
     int x, y;
     string coordonnees = "000";
     bool finPartie = false;
-    debut = clock();
+    
+
     do
     {
+        cout << endl;
         cout << "Choisir case : ";
         cin >> coordonnees;
+
+        // lancement du timer
+        if (!timer.enCours())
+            timer.start();
+
         x = coordonnees[0] - '0' - 1;
         y = coordonnees[1] - '0' - 1;
         if (coordonnees[2] == 'M')
-            dem.getCase(x, y).estMarquee();
+            dem.setCase(x, y, marquee);
         else
-            dem.getCase(x, y).estDecouverte();
+            dem.setCase(x, y, revelee);
+
+        system("cls");
+        // règles du jeu
+        cout << "JEU DU DEMINEUR" << endl << endl;
+        cout << "Pour jouer il faut donner les coordonnees de la case a decouvrir. (ex : 12)" << endl;
+        cout << "Pour marquer l'emplacement d'une mine rajouter 'M' a la suite des coordonnees (ex : 12M)" << endl << endl;
 
         dem.afficherGrille();
-        if (dem.getCase(x, y).isDecouverte() && dem.getCase(x, y).getVal() == 9)
+
+        Case choixCase = dem.getCase(x, y);
+        if (choixCase.isDecouverte() && choixCase.getVal() == 9)
         {
             finPartie = true;
             cout << "Partie perdue ! " << endl;
-            fin = clock();
+            timer.stop();
         }
         if (dem.estTerminee())
         {
             finPartie = true;
             cout << "Partie gagnee ! " << endl;
-            fin = clock();
+            timer.stop();
         }
     } while (!finPartie);
-    temps = ((float)fin - debut) / CLOCKS_PER_SEC;
-    cout << "La partie a duree : " << temps << " sec" << endl;
+    cout << "Duree de la partie : ";
+    timer.afficher();
+    cout << endl;
 }
 
 

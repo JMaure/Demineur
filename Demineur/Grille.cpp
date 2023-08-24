@@ -14,7 +14,7 @@ Grille::Grille() : m_longueur(1), m_hauteur(1), m_nbCases(1)
 }
 
 // Constructeur Grille de la grille de taille longueur * largeur avec valeur des cases à 0
-Grille::Grille(int longueur, int hauteur) : m_longueur(longueur), m_hauteur(hauteur), m_nbCases(longueur * hauteur)
+Grille::Grille(int longueur, int hauteur, int mines) : m_longueur(longueur), m_hauteur(hauteur), m_nbCases(longueur * hauteur), m_mines(mines)
 {
 	for (int j = 0; j < hauteur; j++)
 	{
@@ -31,11 +31,53 @@ Grille::~Grille()
 }
 
 // retourne la Case aux coordonnées x,y
-Case& Grille::getCase(int x, int y)
+Case Grille::getCase(int x, int y)
 {
 	return m_grille.at(x + (y * m_longueur));
 }
 
+// modifie l'etat de la case (1 révélée, 2 marquée)
+void Grille::setCase(int x, int y, int etat)
+{
+	if (etat == 1)
+	{
+		m_grille.at(x + (y * m_longueur)).decouverte();
+		// si la case vaut 0 alors on révèle les cartes autour
+		if (m_grille.at(x + (y * m_longueur)).getVal() == 0)
+			reveleCasesAdj(x, y);
+	}
+	else if (etat == 2)
+	{
+		m_grille.at(x + (y * m_longueur)).marquee();
+	}
+}
+
+// révèle les cases adjacente
+void Grille::reveleCasesAdj(int x, int y)
+{
+	for (int j = y - 1; j <= y + 1; j++)
+	{
+		if (j >= 0 && j < m_hauteur)
+		{
+			for (int i = x - 1; i <= x + 1; i++)
+			{
+				if (i >= 0 && i < m_longueur)
+				{
+					if (!m_grille.at(i + (j * m_longueur)).isDecouverte())
+					{
+						m_grille.at(i + (j * m_longueur)).decouverte();
+						// si les cases autour valent aussi 0 alors on révèle de nouveau les cases autour de celle ci
+						if (m_grille.at(i + (j * m_longueur)).getVal() == 0)
+							reveleCasesAdj(i, j);
+					}
+						
+				}
+			}
+		}
+	}
+}
+
+// affiche la grille avec les valeurs de chaque case
 void Grille::afficherGrille()
 {
 	int cpt = 0;
@@ -73,16 +115,17 @@ void Grille::afficherGrille()
 	cout << endl;
 }
 
-void Grille::affecterMines(int nbMines)
+// affecte le nombre nbMines de mines alétoirement à des cases de la grille
+void Grille::affecterMines()
 {
-	if (nbMines <= 0)
+	if (m_mines <= 0)
 	{
 		for (int i = 0; i < m_nbCases - 1; i++)
 		{
 			m_grille.at(i).setVal(0);
 		}
 	}
-	else if (nbMines >= m_nbCases)
+	else if (m_mines >= m_nbCases)
 	{
 		for (int i = 0; i < m_nbCases - 1; i++)
 		{
@@ -99,7 +142,7 @@ void Grille::affecterMines(int nbMines)
 		}
 
 		srand((unsigned int)time(0));
-		for (int i = 0; i < nbMines; i++)
+		for (int i = 0; i < m_mines; i++)
 		{
 			int valRandom = (int)((float)rand() * choixMines.size() / (RAND_MAX - 1));
 			m_grille.at(choixMines[valRandom]).setVal(9);
@@ -109,21 +152,22 @@ void Grille::affecterMines(int nbMines)
 	}
 }
 
+// affecte la valeur de chaque case par rapport au nombres de mines autour
 void Grille::affecterValeursCases()
 {
 	int cpt = 0;
-	int  abs, coor;
+	int  x, y;
 	for (int parcourCase = 0; parcourCase < m_nbCases; parcourCase++)
 	{
 		if (m_grille.at(parcourCase).getVal() != 9)
 		{
-			abs = m_grille.at(parcourCase).getX();
-			coor = m_grille.at(parcourCase).getY();
-			for (int j = coor - 1; j <= coor + 1; j++)
+			x = m_grille.at(parcourCase).getX();
+			y = m_grille.at(parcourCase).getY();
+			for (int j = y - 1; j <= y + 1; j++)
 			{
 				if (j >= 0 && j < m_hauteur)
 				{
-					for (int i = abs - 1; i <= abs + 1; i++)
+					for (int i = x - 1; i <= x + 1; i++)
 					{
 						if (i >= 0 && i < m_longueur)
 						{
@@ -141,6 +185,7 @@ void Grille::affecterValeursCases()
 	}
 }
 
+// retourne vrai si la grille est entièrement découverte
 bool Grille::estTerminee()
 {
 	bool fini = true;

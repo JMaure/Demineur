@@ -31,13 +31,13 @@ public:
 	bool isDecouverte();
 
 	// Modifie la valeur de m_etat à 1 (case révélée)
-	void estDecouverte();
+	void decouverte();
 
 	// Retourne un booleen pour savoir si la case est marquée comme mine
 	bool isMarquee();
 
 	// Modifie la valeur de m_etat à 2 (case marquée comme mine)
-	void estMarquee();
+	void marquee();
 
 private:
 	// abscisse de la case
