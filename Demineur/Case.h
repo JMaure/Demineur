@@ -15,14 +15,14 @@ public:
 	// Destructeur
 	~Case();
 
-	// retourne la valeur de la Case
-	int getVal() const;
-
 	// retourne l'abscisse de la Case
 	int getX() const;
 
 	// retourne l'ordonnée de la case
 	int getY() const;
+
+	// retourne la valeur de la Case
+	int getVal() const;
 
 	// Modifie la valeur de la case m_valeur
 	void setVal(int val);

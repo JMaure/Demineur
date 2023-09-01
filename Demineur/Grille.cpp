@@ -8,13 +8,14 @@
 
 using namespace std;
 
-Grille::Grille() : m_longueur(1), m_hauteur(1), m_nbCases(1)
+// Constructeur par défaut
+Grille::Grille() : m_longueur(1), m_hauteur(1), m_nbCases(1), m_mines(0), m_mines_restantes(0)
 {
 	m_grille.push_back(Case());
 }
 
 // Constructeur Grille de la grille de taille longueur * largeur avec valeur des cases à 0
-Grille::Grille(int longueur, int hauteur, int mines) : m_longueur(longueur), m_hauteur(hauteur), m_nbCases(longueur * hauteur), m_mines(mines)
+Grille::Grille(int longueur, int hauteur, int mines) : m_longueur(longueur), m_hauteur(hauteur), m_nbCases(longueur * hauteur), m_mines(mines), m_mines_restantes(mines)
 {
 	for (int j = 0; j < hauteur; j++)
 	{
@@ -41,6 +42,9 @@ void Grille::setCase(int x, int y, int etat)
 {
 	if (etat == 1)
 	{
+		// si la case était marquée alors on incrémente le compteur de mines restantes
+		if (m_grille.at(x + (y * m_longueur)).isMarquee())
+			m_mines_restantes++;
 		m_grille.at(x + (y * m_longueur)).decouverte();
 		// si la case vaut 0 alors on révèle les cartes autour
 		if (m_grille.at(x + (y * m_longueur)).getVal() == 0)
@@ -49,6 +53,7 @@ void Grille::setCase(int x, int y, int etat)
 	else if (etat == 2)
 	{
 		m_grille.at(x + (y * m_longueur)).marquee();
+		m_mines_restantes--;
 	}
 }
 
@@ -203,4 +208,10 @@ bool Grille::estTerminee()
 	caseParcourue = 0;
 	delete caseParcourue;
 	return fini;
+}
+
+// retourne le nombre de mines restantes à découvrir
+int Grille::getMineRest()
+{
+	return m_mines_restantes;
 }

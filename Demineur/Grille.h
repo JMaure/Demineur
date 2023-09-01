@@ -39,6 +39,9 @@ public:
 	// retourne vrai si la grille est entièrement découverte
 	bool estTerminee();
 
+	// retourne le nombre de mines restantes à découvrir
+	int getMineRest();
+
 private:
 	// longueur de la grille
 	int m_longueur;
@@ -51,6 +54,9 @@ private:
 
 	// nombre de mines
 	int m_mines;
+
+	// nombre de mines à découvrir
+	int m_mines_restantes;
 
 	// vector contenant les cases de la grille
 	std::vector<Case> m_grille;

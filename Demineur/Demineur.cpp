@@ -16,7 +16,7 @@ int main()
     cout << "Pour marquer l'emplacement d'une mine rajouter 'M' a la suite des coordonnees (ex : 12M)" << endl << endl;
 
     //définition des constantes de grille
-    const int longueur = 5, hauteur = 5, nbMines = 3;
+    const int longueur = 6, hauteur = 9, nbMines = 7;
 
     const int revelee = 1, marquee = 2;
 
@@ -31,6 +31,8 @@ int main()
 
     // affecter les autres valeurs
     dem.affecterValeursCases();
+
+    cout << "Mines restantes : " << dem.getMineRest() << endl << endl;
 
     // affichage de la grille
     dem.afficherGrille();
@@ -63,6 +65,8 @@ int main()
         cout << "Pour jouer il faut donner les coordonnees de la case a decouvrir. (ex : 12)" << endl;
         cout << "Pour marquer l'emplacement d'une mine rajouter 'M' a la suite des coordonnees (ex : 12M)" << endl << endl;
 
+        cout << "Mines restantes : " << dem.getMineRest() << endl << endl;
+
         dem.afficherGrille();
 
         Case choixCase = dem.getCase(x, y);
@@ -79,6 +83,7 @@ int main()
             timer.stop();
         }
     } while (!finPartie);
+
     cout << "Duree de la partie : ";
     timer.afficher();
     cout << endl;
